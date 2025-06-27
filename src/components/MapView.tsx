@@ -21,5 +21,5 @@ export function MapView({ lat, lng }: { lat: number; lng: number }) {
 
   }, [lat, lng]);
 
-  return <div ref={mapRef} style={{ height: '300px', width: '100%' }} />;
+  return <div ref={mapRef} style={{ height: '400px', width: '100%' }} />;
 }

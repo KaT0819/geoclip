@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SearchForm } from './components/SearchForm';
 import { ResultList } from './components/ResultList';
 import { MapView } from './components/MapView';
@@ -21,7 +21,7 @@ function App() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  const handleSearch = async (place: string) => {
+  const handleSearch = useCallback(async (place: string) => {
     try {
       const res = await fetch(`/api/geocode?address=${encodeURIComponent(place)}`);
       if (!res.ok) {
@@ -37,12 +37,12 @@ function App() {
       console.error(error);
       // Handle error appropriately in a real app
     }
-  };
+  }, []);
 
-  const handleCopy = (message: string) => {
+  const handleCopy = useCallback((message: string) => {
     setToastMessage(message);
     setShowToast(true);
-  };
+  }, []);
 
   return (
     <div className="max-w-2xl mx-auto p-4">
