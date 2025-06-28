@@ -1,11 +1,15 @@
 import 'dotenv/config';
 import express from 'express';
 import { Client } from '@googlemaps/google-maps-services-js';
+import path from 'path';
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001; // 環境変数PORTがあればそれを使用、なければ3001
 
 const client = new Client({});
+
+// フロントエンドのビルド済みファイルを配信
+app.use(express.static(path.join(__dirname, '../build')));
 
 app.get('/api/geocode', async (req, res) => {
   const address = req.query.address as string;
@@ -29,6 +33,11 @@ app.get('/api/geocode', async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch geocoding data' });
   }
+});
+
+// その他のリクエストはReactアプリにルーティング
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 app.listen(port, () => {

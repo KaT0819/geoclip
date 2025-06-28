@@ -24,14 +24,14 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": "npm-run-all -p start-react start-server",
+        "dev": "npm-run-all -p start-react start-server",
         "start-react": "PORT=3003 react-scripts start",
         "start-server": "ts-node server/index.ts",
-        "build": "react-scripts build",
+        "build": "react-scripts build && tsc --project tsconfig.server.json",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "serve": "node dist/index.js"
     },
-    "proxy": "http://localhost:3001",
     "eslintConfig": {
         "extends": [
             "react-app",
