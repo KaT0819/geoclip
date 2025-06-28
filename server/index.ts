@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import { Client } from '@googlemaps/google-maps-services-js';
-import path from 'path';
+import * as path from 'path';
 
 const app = express();
 const port = process.env.PORT || 3001; // 環境変数PORTがあればそれを使用、なければ3001
@@ -36,7 +36,7 @@ app.get('/api/geocode', async (req, res) => {
 });
 
 // その他のリクエストはReactアプリにルーティング
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
