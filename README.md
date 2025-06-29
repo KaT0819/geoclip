@@ -1,46 +1,103 @@
-# Getting Started with Create React App
+# Geoclip
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Geoclip は、地名やランドマークから住所・緯度・経度を検索し、結果を表示・コピー・地図表示まで一貫して行えるシンプルな Web アプリケーションです。
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🎯 主な機能
 
-### `npm start`
+- **オートコンプリート検索**: Google Places API を使った入力候補表示
+- **Geocoding**: Google Geocoding API による住所→緯度・経度変換
+- **結果コピー**: 住所・緯度・経度をクリップボードにコピー
+- **地図表示**: Leaflet + OpenStreetMap で検索結果をマーカー表示
+- **トースト通知**: 処理成功／失敗を画面端に一時表示
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 📁 リポジトリ構成
 
-### `npm test`
+```
+geoclip/
+├─ server/                # Express による API プロキシ
+│   └─ index.ts           # Autocomplete/Geocoding エンドポイント
+├─ src/                   # React アプリケーション本体
+│   ├─ components/        # UI コンポーネント群
+│   │   ├─ SearchForm.tsx  # 検索フォーム・オートコンプリート
+│   │   ├─ ResultList.tsx  # 検索結果リスト・コピー機能
+│   │   ├─ MapView.tsx     # Leaflet 地図描画
+│   │   └─ ToastNotification.tsx # トースト通知
+│   ├─ App.tsx            # コンポーネント連携・状態管理
+│   └─ index.tsx          # エントリポイント
+├─ public/                # 静的ファイル (index.html など)
+├─ build/                 # production ビルド成果物
+├─ dist/                  # サーバー用ビルド成果物
+├─ .env.sample            # 環境変数サンプル (APIキー設定)
+├─ package.json           # npm スクリプト & 依存管理
+└─ tsconfig*.json         # TypeScript 設定ファイル
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ⚙️ 環境構築・実行方法
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 前提
+- Node.js (v14 以上推奨)
+- npm または Yarn
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### セットアップ
+```bash
+# リポジトリを clone
+git clone <リポジトリURL>
+cd geoclip
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# 環境変数ファイル作成 (.env.sample をコピー)
+cp .env.sample .env
+# .env に Google Maps API キーを設定
 
-### `npm run eject`
+# 依存インストール
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### 開発モード
+```bash
+# サーバー＋クライアントを並行起動
+npm run dev
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# クライアント: http://localhost:3003
+# サーバー : http://localhost:3001
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### プロダクションビルド & 起動
+```bash
+# ビルド (クライアント + サーバー)
+npm run build
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# サーバー起動 (静的配信 + API)
+npm run serve
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🔧 スクリプト一覧 (package.json)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| コマンド          | 説明                                  |
+| :--------------- | :------------------------------------- |
+| `npm run dev`    | クライアント (CRA) & サーバー (Express) の同時起動 |
+| `npm run build`  | クライアントの production ビルド & サーバー TypeScript コンパイル |
+| `npm run serve`  | `dist/index.js` による production サーバー起動 |
+| `npm test`       | テスト実行 (Jest + RTL)                |
+| `npm run eject`  | CRA の設定を ejected する (注意：一方向) |
+
+---
+
+## 📖 技術スタック
+
+- フロントエンド: React + TypeScript + Tailwind CSS
+- バックエンド: Node.js + Express
+- 地図描画: Leaflet + OpenStreetMap
+- オートコンプリート/ジオコーディング: Google Maps API (Places, Geocoding)
+
+---
+
+## 📝 ライセンス
+MIT

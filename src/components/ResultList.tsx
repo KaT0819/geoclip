@@ -13,7 +13,17 @@ interface ResultListProps {
   onCopy: (message: string) => void;
 }
 
+/**
+ * ResultList コンポーネント
+ * - Geocoding API の結果住所・緯度・経度を表示
+ * - 各フィールド毎のコピー機能を提供
+ */
 export function ResultList({ results, onCopy }: ResultListProps) {
+  /**
+   * テキストをクリップボードにコピーして通知
+   * @param text コピー対象文字列
+   * @param fieldName フィールド名（通知メッセージ用）
+   */
   const copyToClipboard = (text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);
     onCopy(`${fieldName}をコピーしました！`);

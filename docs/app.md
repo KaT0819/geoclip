@@ -16,6 +16,8 @@
   1. 検索フォーム
 
      * テキスト入力（プレースホルダー「地名を入力」）
+     * 入力補完（Places APIによるオートコンプリート候補表示）
+     * 入力保持（ローカルストレージに検索キーワードを保存・復元）
      * 検索ボタン押下でGeocoding API呼び出し
   2. 結果表示エリア
 
@@ -43,6 +45,20 @@
 
      ```html
      <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+     ```
+
+  4. Google Maps Places APIスクリプト読み込みと環境変数設定
+
+     プロジェクトルートに `.env` ファイルを作成し、`.env.sample` を参考に Google Maps APIキーを設定します。
+
+     ```bash
+     cp .env.sample .env
+     ```
+
+     `public/index.html` の `<body>` タグ内（または `<head>` の最後）に以下を追加します。
+
+     ```html
+     <script async defer src="https://maps.googleapis.com/maps/api/js?key=%REACT_APP_GOOGLE_MAPS_API_KEY%&libraries=places"></script>
      ```
 
 * **主要コンポーネント設計**
@@ -92,12 +108,12 @@
   1. テスト：Jest + React Testing Library
   2. 静的ホスティング：Vercel／Netlify
   3. 環境変数：APIキーは `.env` で管理
+
+     プロジェクトルートに `.env` ファイルを作成し、`.env.sample` を参考に `REACT_APP_GOOGLE_MAPS_API_KEY` を設定します。
   4. OSM利用：タイルアクセス負荷に注意（必要に応じてキャッシュ）
 
 * **注意事項／今後の拡張**
 
   * Geocoding APIの利用上限管理（現在の無料枠内運用）
-  * 検索履歴キャッシュ機能
-  * 候補選択UI（複数結果対応）
   * モバイルレスポンシブ最適化
   * ローディング・エラーハンドリング強化
