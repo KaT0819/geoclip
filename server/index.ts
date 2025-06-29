@@ -71,9 +71,10 @@ app.get('/api/geocode', async (req: express.Request, res: express.Response) => {
 });
 
 /**
- * SPA 対応: 上記 API 以外のリクエストはすべて index.html を返却
+ * SPA 対応: 上記 API 以外の全リクエストは React の index.html を返却
+ * '*' だと path-to-regexp v6 でエラーになるため '/*' を使用
  */
-app.get('*', (req: express.Request, res: express.Response) => {
+app.get('/*', (req: express.Request, res: express.Response) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
