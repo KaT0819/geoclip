@@ -16,7 +16,7 @@ export function MapView({ lat, lng }: { lat: number; lng: number }) {
 
     if (!mapInstance.current) {
       // 初回マウント時: 地図インスタンスを生成
-      mapInstance.current = L.map(mapRef.current).setView([lat, lng], 16);
+      mapInstance.current = L.map(mapRef.current).setView([lat, lng], 18);
       // タイルレイヤーに OpenStreetMap を設定
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',

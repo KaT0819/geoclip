@@ -25,22 +25,25 @@ app.use(express.static(path.join(__dirname, '../build')));
  * リクエストパラメータ input に基づき Google Places Autocomplete API を呼び出す
  * ブラウザの CORS 制限回避のためサーバー経由でプロキシ
  */
-app.get('/api/autocomplete', async (req: express.Request, res: express.Response) => {
-  const input = req.query.input as string;
-  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'API key is not set.' });
-  }
-  try {
-    const response = await client.placeAutocomplete({
-      params: { key: apiKey, input, language: 'ja' },
-    });
-    res.json(response.data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch autocomplete data' });
-  }
-});
+app.get(
+  '/api/autocomplete',
+  async (req: express.Request, res: express.Response) => {
+    const input = req.query.input as string;
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: 'API key is not set.' });
+    }
+    try {
+      const response = await client.placeAutocomplete({
+        params: { key: apiKey, input, language: 'ja' },
+      });
+      res.json(response.data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to fetch autocomplete data' });
+    }
+  },
+);
 
 /**
  * GET /api/geocode
@@ -49,7 +52,6 @@ app.get('/api/autocomplete', async (req: express.Request, res: express.Response)
 app.get('/api/geocode', async (req: express.Request, res: express.Response) => {
   const address = req.query.address as string;
   const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-  console.log(`Received request for address: ${address}`);
 
   if (!apiKey) {
     return res.status(500).json({ error: 'API key is not set.' });

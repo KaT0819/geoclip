@@ -21,6 +21,7 @@ interface AutocompletePrediction {
 export default function SearchForm({ onSearch, onError }: SearchFormProps) {
   const [place, setPlace] = useState('');
   const [suggestions, setSuggestions] = useState<AutocompletePrediction[]>([]);
+  const [skipAutocompleteFetch, setSkipAutocompleteFetch] = useState(false);
 
   /**
    * フォーム送信ハンドラ
@@ -42,6 +43,9 @@ export default function SearchForm({ onSearch, onError }: SearchFormProps) {
       setSuggestions([]);
       return;
     }
+    if (skipAutocompleteFetch) {
+      return;
+    }
     const timer = setTimeout(async () => {
       try {
         const res = await fetch(
@@ -59,7 +63,7 @@ export default function SearchForm({ onSearch, onError }: SearchFormProps) {
       }
     }, 300);
     return () => clearTimeout(timer);
-  }, [place]);
+  }, [place, skipAutocompleteFetch]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
   /**
@@ -67,6 +71,7 @@ export default function SearchForm({ onSearch, onError }: SearchFormProps) {
    * place を候補で置換し onSearch を実行
    */
   const handleSuggestionClick = (description: string) => {
+    setSkipAutocompleteFetch(true);
     setPlace(description);
     setSuggestions([]);
     onSearch(description);
@@ -74,15 +79,15 @@ export default function SearchForm({ onSearch, onError }: SearchFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center space-x-2">
-      <label htmlFor="place-input" className="text-sm text-gray-700">
-        地名
-      </label>
       <div className="relative flex-grow">
         <input
           id="place-input"
           type="text"
           value={place}
-          onChange={e => setPlace(e.target.value)}
+          onChange={e => {
+            setPlace(e.target.value);
+            setSkipAutocompleteFetch(false);
+          }}
           placeholder="地名を入力"
           autoComplete="off"
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-800"

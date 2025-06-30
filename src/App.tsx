@@ -23,6 +23,7 @@ interface GeocodeResult {
 function App() {
   // Geocoding API の結果リスト
   const [results, setResults] = useState<GeocodeResult[]>([]);
+  const [landmarkName, setLandmarkName] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -33,12 +34,14 @@ function App() {
    */
   const handleSearch = useCallback(async (place: string) => {
     try {
+      const landmarkName = place.trim().split(' ').filter(Boolean).pop() ?? '';
+      setLandmarkName(landmarkName);
+
       const res = await fetch(`/api/geocode?address=${encodeURIComponent(place)}`);
       if (!res.ok) {
         throw new Error('Geocoding API request failed');
       }
       const data = await res.json();
-      console.log(data);
       setResults(data.results);
       if (data.results.length > 0) {
         setSelectedLocation(data.results[0].geometry.location);
@@ -70,7 +73,7 @@ function App() {
         }}
       />
       <div className="mt-4">
-        <ResultList results={results} onCopy={handleCopy} />
+        <ResultList landmarkName={landmarkName} results={results} onCopy={handleCopy} />
       </div>
       <div className="mt-4">
         {/* 検索結果の座標に基づき地図表示 */}
